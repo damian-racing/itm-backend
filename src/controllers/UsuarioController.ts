@@ -38,10 +38,10 @@ export default class UsuarioController extends BaseController {
             { where: { id }, validate: true },
         )
         .then(async (user) => {        
-            if (! user[0]) res.status(400).send(errorResponse(400, Error('User not found')));
+            if (! user[0]) res.status(400).send(errorResponse(400, Error('Usuario no encontrado')));
             else {
                 const userEntity = await UsuarioModel.findByPk(id);
-                if (! userEntity) res.status(400).send(errorResponse(400, Error('User not found')));
+                if (! userEntity) res.status(400).send(errorResponse(400, Error('Usuario no encontrado')));
     
                 res.status(200).json(successResponse({userEntity}));
             }
@@ -62,7 +62,7 @@ export default class UsuarioController extends BaseController {
             { where: { id }, validate: true}
         )
         .then((user) => {
-            if (! user[0]) res.status(400).send(errorResponse(400, Error('User not found')));
+            if (! user[0]) res.status(400).send(errorResponse(400, Error('Usuario no encontrado')));
             else res.status(204).end();
         })
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));

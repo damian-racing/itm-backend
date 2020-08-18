@@ -12,6 +12,9 @@ export default class BaseController {
     static async create(req: express.Request, res: express.Response) {
         const object = req.body;
         
+        object.fecha_estado = new Date();
+        object.estado = 'activo';
+
         BaseController.model.create(object, { validate: true })
         .then(model => res.status(201).json(successResponse(model)))
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
