@@ -1,12 +1,14 @@
 import express from 'express';
-import * as UsuarioController from '../controllers/usuario-controller';
+import UsuarioController from '../controllers/UsuarioController';
 
 const router = express.Router();
 
-router.get('/usuarios', UsuarioController.findAll);
+new UsuarioController;
+
+router.get('/usuarios', UsuarioController.list);
 router.post('/usuarios', UsuarioController.create);
-router.get('/usuarios/:id', UsuarioController.findById);
+router.get('/usuarios/:id', UsuarioController.read);
 router.put('/usuarios/:id', UsuarioController.update);
-router.delete('/usuarios/:id', UsuarioController.remove);
+router.delete('/usuarios/:id', UsuarioController.delete);
 
 export default router;

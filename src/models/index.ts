@@ -1,5 +1,5 @@
 import Connection from '../configuration/index';
-import UsuarioSchema from './usuario-model';
+import UsuarioSchema from './UsuarioModel';
 
 const sequelize = Connection();
 
