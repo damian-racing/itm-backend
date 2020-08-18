@@ -8,7 +8,7 @@ export default class CarreraController extends BaseController {
         super(CarreraModel);
     }
     
-    static async update(req: express.Request, res: express.Response) {
+    public async update(req: express.Request, res: express.Response) {
         const id = req.params.id;
         const carreraFieldsUpdate = req.body;
         
@@ -35,7 +35,7 @@ export default class CarreraController extends BaseController {
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
     
-    static async delete(req: express.Request, res: express.Response) {
+    public async delete(req: express.Request, res: express.Response) {
         const id = req.params.id;
     
         const carreraFieldsUpdate = {

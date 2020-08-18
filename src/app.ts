@@ -22,7 +22,7 @@ class App {
 			extended: true
 		}));
 
-		this.app.use('/api/', router);
+		this.app.use('/api', router);
 
 		this.app.get('/', function(req, res){
 			res.send('Hello World!')
