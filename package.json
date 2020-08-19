@@ -1,11 +1,12 @@
 {
-  "name": "itm",
+  "name": "itm-backend",
   "version": "1.0.0",
-  "description": "ITM project",
+  "description": "ITM backend",
   "main": "index.js",
   "repository": "git@github.com:damian-racing/itm.git",
   "author": "Damián Sciutto",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "start": "nodemon ./src/dist/app.js"
   },
