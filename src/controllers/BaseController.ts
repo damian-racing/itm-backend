@@ -21,8 +21,13 @@ export default class BaseController {
     };
     
     public async list(req: express.Request, res: express.Response) {
-        console.log(BaseController.baseModel);
-        BaseController.baseModel.findAll()
+        const query = {
+            where: {
+                estado: 'activo'
+            }
+        }
+
+        BaseController.baseModel.findAll(query)
         .then(collection => res.status(200).json(successResponse(collection)))
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
