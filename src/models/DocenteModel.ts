@@ -7,7 +7,6 @@ export default function DocenteSchema(sequelize: Sequelize.Sequelize) {
         telefono: Sequelize.STRING(20),
         celular: Sequelize.STRING(20),
         email: Sequelize.STRING(100),
-        fecha_ingreso: Sequelize.DATE,
         estado: Sequelize.ENUM('activo', 'baja'),
         fecha_estado: Sequelize.DATE
     },{
