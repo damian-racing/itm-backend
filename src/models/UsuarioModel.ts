@@ -1,14 +1,11 @@
-import Sequelize from 'sequelize';
+import sequelize from '../configuration'; 
+import Sequelize, { Model } from 'sequelize';
 
-export default function UsuarioSchema(sequelize: Sequelize.Sequelize) {
-    const model = sequelize.define('usuarios', {
-        username: Sequelize.STRING(100),
-        password: Sequelize.STRING(255),
-        estado: Sequelize.ENUM('activo', 'baja'),
-        fecha_estado: Sequelize.DATE
-    },{
-        timestamps: true
-    });
+export default class UsuarioModel extends Model {}
 
-    return model;
-}
+UsuarioModel.init({
+    username: Sequelize.STRING(100),
+    password: Sequelize.STRING(255),
+    estado: Sequelize.ENUM('activo', 'baja'),
+    fecha_estado: Sequelize.DATE
+}, { sequelize, modelName: 'usuarios', timestamps: true });

@@ -9,21 +9,18 @@ const DB_DATABASE: string = process.env.DB_DATABASE || "";
 const DB_USERNAME: string = process.env.DB_USERNAME || "";
 const DB_PASSWORD: string = process.env.DB_PASSWORD || "";
 
-function Connection() {
-    const sequelize = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
-        host: DB_HOST,
-        dialect: DB_CONNECTION
-    });
+const sequelize = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: DB_CONNECTION
+});
 
-    try {
-        sequelize.authenticate();
-        console.info(`Connection has been established successfully to database ${DB_DATABASE}`);
+try {
+    sequelize.authenticate();
+    console.info(`Connection has been established successfully to database ${DB_DATABASE}`);
 
-        return sequelize;
-    } catch (error) {
-        console.error(`errors: ' ${error}`);
-        throw Error(error);
-    }
+} catch (error) {
+    console.error(`errors: ' ${error}`);
+    throw Error(error);
 }
 
-export default Connection;
+export default sequelize;

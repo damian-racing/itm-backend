@@ -2,7 +2,7 @@ import express from 'express';
 import md5 from 'md5';
 import { Model, ModelCtor } from "sequelize/types";
 import { successResponse, errorResponse } from '../valueObject/response';
-import { UsuarioModel } from '../models';
+import UsuarioModel from '../models/UsuarioModel';
 import BaseController from './BaseController';
 
 export default class UsuarioController extends BaseController {

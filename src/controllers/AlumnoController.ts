@@ -1,6 +1,6 @@
 import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
-import { AlumnoModel } from '../models';
+import AlumnoModel from '../models/AlumnoModel';
 import BaseController from './BaseController';
 
 export default class AlumnoController extends BaseController {

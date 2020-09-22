@@ -1,13 +1,14 @@
-import Sequelize from 'sequelize';
+import sequelize from '../configuration'; 
+import Sequelize, { Model } from 'sequelize';
+import MateriaModel from './MateriaModel';
 
-export default function CarreraSchema(sequelize: Sequelize.Sequelize) {
-    const model = sequelize.define('carreras', {
-        nombre: Sequelize.STRING(45),
-        estado: Sequelize.ENUM('activo', 'baja'),
-        fecha_estado: Sequelize.DATE
-    },{
-        timestamps: true
-    });
+export default class CarreraModel extends Model {}
 
-    return model;
-}
+CarreraModel.init({
+    nombre: Sequelize.STRING(45),
+    estado: Sequelize.ENUM('activo', 'baja'),
+    fecha_estado: Sequelize.DATE
+}, { sequelize, modelName: 'carreras', timestamps: true });
+
+CarreraModel.belongsToMany(MateriaModel, { through: 'carreras_materias', foreignKey: 'carrera_id' });
+MateriaModel.belongsToMany(CarreraModel, { through: 'carreras_materias', foreignKey: 'materia_id' });

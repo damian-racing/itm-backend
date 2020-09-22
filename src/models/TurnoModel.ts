@@ -1,11 +1,11 @@
-import Sequelize from 'sequelize';
+// import Sequelize from 'sequelize';
 
-export default function TurnoSchema(sequelize: Sequelize.Sequelize) {
-    const model = sequelize.define('turnos', {
-        nombre: Sequelize.STRING(45),
-    },{
-        timestamps: false
-    });
+// export default function TurnoSchema(sequelize: Sequelize.Sequelize) {
+//     const model = sequelize.define('turnos', {
+//         nombre: Sequelize.STRING(45),
+//     },{
+//         timestamps: false
+//     });
 
-    return model;
-}
+//     return model;
+// }
