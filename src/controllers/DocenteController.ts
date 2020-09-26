@@ -8,7 +8,7 @@ export default class DocenteController extends BaseController {
         super(DocenteModel);
     }
     
-    static async update(req: express.Request, res: express.Response) {
+    public async update(req: express.Request, res: express.Response) {
         const id = req.params.id;
         const docenteFieldsUpdate = req.body;
         
@@ -41,7 +41,7 @@ export default class DocenteController extends BaseController {
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
     
-    static async delete(req: express.Request, res: express.Response) {
+    public async delete(req: express.Request, res: express.Response) {
         const id = req.params.id;
     
         const docenteFieldsUpdate = {

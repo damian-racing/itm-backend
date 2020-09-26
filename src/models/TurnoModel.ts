@@ -1,11 +1,12 @@
-// import Sequelize from 'sequelize';
+import sequelize from '../configuration'; 
+import Sequelize, { Model } from 'sequelize';
+import MateriaModel from './MateriaModel';
 
-// export default function TurnoSchema(sequelize: Sequelize.Sequelize) {
-//     const model = sequelize.define('turnos', {
-//         nombre: Sequelize.STRING(45),
-//     },{
-//         timestamps: false
-//     });
+export default class TurnoModel extends Model {}
 
-//     return model;
-// }
+TurnoModel.init({
+    nombre: Sequelize.STRING(45),
+}, { sequelize, modelName: 'turnos', timestamps: false });
+
+TurnoModel.belongsToMany(MateriaModel, { through: 'materias_turnos', foreignKey: 'turno_id' });
+MateriaModel.belongsToMany(TurnoModel, { through: 'materias_turnos', foreignKey: 'materia_id' });
