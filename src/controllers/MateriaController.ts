@@ -14,7 +14,13 @@ export default class MateriaController extends BaseController {
         const id = req.params.id;
 
         const query = {
-            include: TurnoModel
+            include: [
+                TurnoModel,
+                {
+                    model: MateriaModel,
+                    as: 'correlativas_materias'
+                }
+            ]
         }
 
         MateriaModel.findByPk(id, query)

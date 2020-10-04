@@ -7,6 +7,7 @@ import DocenteRouter from '../routes/DocenteRouter';
 import AlumnoRouter from '../routes/AlumnoRouter';
 import CarreraMateriaRouter from '../routes/CarreraMateriaRouter';
 import TurnoRouter from '../routes/TurnoRouter';
+import CorrelativaRouter from '../routes/CorrelativaRouter';
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/docentes', DocenteRouter);
 router.use('/alumnos', AlumnoRouter);
 router.use('/carreras_materias', CarreraMateriaRouter);
 router.use('/turnos', TurnoRouter);
+router.use('/correlativas', CorrelativaRouter);
 
 export default router;
