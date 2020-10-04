@@ -13,7 +13,12 @@ export default class CarreraController extends BaseController {
         const id = req.params.id;
 
         const query = {
-            include: MateriaModel
+            include: {
+                model: MateriaModel,
+                through: {
+                  attributes: ['id', 'materia_id', 'carrera_id']
+                }
+            }
         }
 
         CarreraModel.findByPk(id, query)
