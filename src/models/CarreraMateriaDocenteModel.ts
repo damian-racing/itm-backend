@@ -1,5 +1,7 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
+import CarreraMateriaModel from './CarreraMateriaModel';
+import DocenteModel from './DocenteModel';
 
 export default class CarreraMateriaDocenteModel extends Model {}
 

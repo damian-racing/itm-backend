@@ -1,6 +1,7 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
 import MateriaModel from './MateriaModel';
+import CarreraMateriaModel from './CarreraMateriaModel';
 
 export default class CarreraModel extends Model {}
 
@@ -10,5 +11,5 @@ CarreraModel.init({
     fecha_estado: Sequelize.DATE
 }, { sequelize, modelName: 'carreras', timestamps: true });
 
-CarreraModel.belongsToMany(MateriaModel, { through: 'carreras_materias', foreignKey: 'carrera_id' });
-MateriaModel.belongsToMany(CarreraModel, { through: 'carreras_materias', foreignKey: 'materia_id' });
+CarreraModel.hasMany(CarreraMateriaModel, {foreignKey: 'carrera_id'});
+CarreraMateriaModel.belongsTo(CarreraModel, {foreignKey: 'carrera_id'});

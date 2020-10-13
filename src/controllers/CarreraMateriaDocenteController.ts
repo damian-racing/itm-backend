@@ -2,6 +2,10 @@ import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
 import CarreraMateriaDocenteModel from '../models/CarreraMateriaDocenteModel';
 import BaseController from './BaseController';
+import DocenteModel from '../models/DocenteModel';
+import CarreraMateriaModel from '../models/CarreraMateriaModel';
+import CarreraModel from '../models/CarreraModel';
+import MateriaModel from '../models/MateriaModel';
 
 export default class CarreraMateriaDocenteController extends BaseController {
     constructor() {
@@ -20,6 +24,23 @@ export default class CarreraMateriaDocenteController extends BaseController {
     
     public async list(req: express.Request, res: express.Response) {
         const query = {
+            include: [                
+                DocenteModel,                
+                {
+                    model: CarreraMateriaModel,
+                    as: 'carreras_materia',
+                    include: [
+                        {
+                            model: CarreraModel,
+                            as: 'carrera'
+                        },
+                        {
+                            model: MateriaModel,
+                            as: 'materia'
+                        }                        
+                    ]
+                },
+            ],
             where: {
                 fecha_hasta: null
             }
@@ -32,7 +53,25 @@ export default class CarreraMateriaDocenteController extends BaseController {
     
     public async read(req: express.Request, res: express.Response) {
         const id = req.params.id;
-        CarreraMateriaDocenteModel.findByPk(id)
+        CarreraMateriaDocenteModel.findByPk(id, {
+            include: [                
+                DocenteModel,                
+                {
+                    model: CarreraMateriaModel,
+                    as: 'carreras_materia',
+                    include: [
+                        {
+                            model: CarreraModel,
+                            as: 'carrera'
+                        },
+                        {
+                            model: MateriaModel,
+                            as: 'materia'
+                        }                        
+                    ]
+                },
+            ],
+        })
         .then(model => {
             if (! model) res.status(400).send(errorResponse(400, Error('No encontrado')));
             else res.status(200).json(successResponse({model}));

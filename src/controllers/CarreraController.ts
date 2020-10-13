@@ -3,6 +3,7 @@ import { successResponse, errorResponse } from '../valueObject/response';
 import CarreraModel from '../models/CarreraModel';
 import BaseController from './BaseController';
 import MateriaModel from '../models/MateriaModel';
+import CarreraMateriaModel from '../models/CarreraMateriaModel';
 
 export default class CarreraController extends BaseController {
     constructor() {
@@ -14,10 +15,12 @@ export default class CarreraController extends BaseController {
 
         const query = {
             include: {
-                model: MateriaModel,
-                through: {
-                  attributes: ['id', 'materia_id', 'carrera_id']
-                }
+                model: CarreraMateriaModel,
+                include: [
+                    {
+                        model: MateriaModel
+                    }
+                ]
             }
         }
 

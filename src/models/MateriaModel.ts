@@ -1,5 +1,6 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
+import CarreraMateriaModel from './CarreraMateriaModel';
 
 export default class MateriaModel extends Model {}
 
@@ -11,3 +12,5 @@ MateriaModel.init({
 
 MateriaModel.belongsToMany(MateriaModel, { as: 'children', through: 'correlativas', foreignKey: 'correlativa_id' });
 MateriaModel.belongsToMany(MateriaModel, { as: 'correlativas_materias', through: 'correlativas', foreignKey: 'materia_id' });
+MateriaModel.hasMany(CarreraMateriaModel, {foreignKey: 'materia_id'});
+CarreraMateriaModel.belongsTo(MateriaModel, {foreignKey: 'materia_id'});

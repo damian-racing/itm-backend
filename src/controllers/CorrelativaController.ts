@@ -7,7 +7,6 @@ export default class CorrelativaController {
     
     public async create(req: express.Request, res: express.Response) {
         const collection = req.body;
-        console.log(Object.entries(collection));
         if (Object.entries(collection).length === 0 || collection.length === 0) return res.status(400).send(errorResponse(400, Error("Por favor seleccione la materia con sus correlativas")));
 
         const query = {

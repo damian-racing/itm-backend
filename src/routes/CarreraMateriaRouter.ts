@@ -13,5 +13,6 @@ const carreraMateriaMiddleware = (req: express.Request, res: express.Response, n
 router.use(carreraMateriaMiddleware);
 
 router.post('/', carreraMateriaController.create);
+router.delete('/', carreraMateriaController.delete);
 
 export default router;
