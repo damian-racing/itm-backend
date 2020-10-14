@@ -1,4 +1,5 @@
 import express from 'express';
+import { Op } from 'sequelize';
 import { successResponse, errorResponse } from '../valueObject/response';
 import CarreraMateriaDocenteModel from '../models/CarreraMateriaDocenteModel';
 import BaseController from './BaseController';
@@ -17,9 +18,18 @@ export default class CarreraMateriaDocenteController extends BaseController {
         
         object.fecha_estado = new Date();
         
-        CarreraMateriaDocenteModel.create(object, { validate: true })
-        .then(model => res.status(201).json(successResponse(model)))
-        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        const exist = await CarreraMateriaDocenteModel.findAll({where: {
+            carrera_materia_id: object.carrera_materia_id,
+            docente_id: object.docente_id,
+            fecha_hasta: null
+        }});
+
+        if (exist.length > 0) res.status(400).send(errorResponse(400, Error("Carrera materia docente existente")));
+        else {
+            CarreraMateriaDocenteModel.create(object, { validate: true })
+            .then(model => res.status(201).json(successResponse(model)))
+            .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        }
     };
     
     public async list(req: express.Request, res: express.Response) {
@@ -82,7 +92,7 @@ export default class CarreraMateriaDocenteController extends BaseController {
     public async update(req: express.Request, res: express.Response) {
         const id = req.params.id;
         const objectFieldUpdate = req.body;
-    
+
         CarreraMateriaDocenteModel.update(
             objectFieldUpdate,
             { where: { id }, validate: true },
