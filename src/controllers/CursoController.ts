@@ -1,15 +1,15 @@
 import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
-import CarreraMateriaDocenteModel from '../models/CarreraMateriaDocenteModel';
+import CursoModel from '../models/CursoModel';
 import BaseController from './BaseController';
 import DocenteModel from '../models/DocenteModel';
 import CarreraMateriaModel from '../models/CarreraMateriaModel';
 import CarreraModel from '../models/CarreraModel';
 import MateriaModel from '../models/MateriaModel';
 
-export default class CarreraMateriaDocenteController extends BaseController {
+export default class CursoController extends BaseController {
     constructor() {
-        super(CarreraMateriaDocenteModel);
+        super(CursoModel);
     }
 
     public async create(req: express.Request, res: express.Response) {
@@ -17,15 +17,15 @@ export default class CarreraMateriaDocenteController extends BaseController {
         
         object.fecha_estado = new Date();
         
-        const exist = await CarreraMateriaDocenteModel.findAll({where: {
-            carrera_materia_id: object.carrera_materia_id,
-            docente_id: object.docente_id,
+        const exist = await CursoModel.findAll({where: {
+            alumno_id: object.alumno_id,
+            carrera_materia_docente_id: object.carrera_materia_docente_id,
             fecha_hasta: null
         }});
 
-        if (exist.length > 0) res.status(400).send(errorResponse(400, Error("Carrera materia docente existente")));
+        if (exist.length > 0) res.status(400).send(errorResponse(400, Error("Curso existente")));
         else {
-            CarreraMateriaDocenteModel.create(object, { validate: true })
+            CursoModel.create(object, { validate: true })
             .then(model => res.status(201).json(successResponse(model)))
             .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
         }
@@ -33,52 +33,52 @@ export default class CarreraMateriaDocenteController extends BaseController {
     
     public async list(req: express.Request, res: express.Response) {
         const query = {
-            include: [                
-                DocenteModel,                
-                {
-                    model: CarreraMateriaModel,
-                    as: 'carreras_materia',
-                    include: [
-                        {
-                            model: CarreraModel,
-                            as: 'carrera'
-                        },
-                        {
-                            model: MateriaModel,
-                            as: 'materia'
-                        }                        
-                    ]
-                },
-            ],
+            // include: [                
+            //     DocenteModel,                
+            //     {
+            //         model: CarreraMateriaModel,
+            //         as: 'carreras_materia',
+            //         include: [
+            //             {
+            //                 model: CarreraModel,
+            //                 as: 'carrera'
+            //             },
+            //             {
+            //                 model: MateriaModel,
+            //                 as: 'materia'
+            //             }                        
+            //         ]
+            //     },
+            // ],
             where: {
                 fecha_hasta: null
             }
         }
 
-        CarreraMateriaDocenteModel.findAll(query)
+        CursoModel.findAll(query)
         .then(collection => res.status(200).json(successResponse(collection)))
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
     
     public async read(req: express.Request, res: express.Response) {
         const id = req.params.id;
-        CarreraMateriaDocenteModel.findByPk(id, {
+        CursoModel.findByPk(id, {
             include: [                
-                DocenteModel,                
-                {
-                    model: CarreraMateriaModel,
-                    as: 'carreras_materia',
-                    include: [
-                        {
-                            model: CarreraModel,
-                            as: 'carrera'
-                        },
-                        {
-                            model: MateriaModel,
-                            as: 'materia'
-                        }                        
-                    ]
-                },
+                // DocenteModel,                
+                // {
+                //     model: CarreraMateriaModel,
+                //     as: 'carreras_materia',
+                //     include: [
+                //         {
+                //             model: CarreraModel,
+                //             as: 'carrera'
+                //         },
+                //         {
+                //             model: MateriaModel,
+                //             as: 'materia'
+                //         }                        
+                //     ]
+                // },
             ],
         })
         .then(model => {
@@ -92,14 +92,14 @@ export default class CarreraMateriaDocenteController extends BaseController {
         const id = req.params.id;
         const objectFieldUpdate = req.body;
 
-        CarreraMateriaDocenteModel.update(
+        CursoModel.update(
             objectFieldUpdate,
             { where: { id }, validate: true },
         )
         .then(async(object) => {        
             if (! object[0]) res.status(400).send(errorResponse(400, Error('No encontrado')));
             else {
-                const objectEntity = await CarreraMateriaDocenteModel.findByPk(id);
+                const objectEntity = await CursoModel.findByPk(id);
                 if (! objectEntity) res.status(400).send(errorResponse(400, Error('No encontrado')));
     
                 res.status(200).json(successResponse({objectEntity}));
@@ -115,7 +115,7 @@ export default class CarreraMateriaDocenteController extends BaseController {
             fecha_hasta: new Date()
         }
     
-        CarreraMateriaDocenteModel.update(
+        CursoModel.update(
             objectFieldUpdate,
             { where: { id }, validate: true}
         )
