@@ -5,12 +5,12 @@ const router = express.Router();
 
 let cursoController = new CursoController;
 
-const carreraMateriaDocenteMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+const cursoMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     cursoController = new CursoController;
     next();
 }
 
-router.use(carreraMateriaDocenteMiddleware);
+router.use(cursoMiddleware);
 
 router.get('/', cursoController.list);
 router.post('/', cursoController.create);

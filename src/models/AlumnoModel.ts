@@ -1,5 +1,6 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
+import CursoAlumnoModel from './CursoAlumnoModel';
 
 export default class AlumnoModel extends Model {}
 
@@ -17,3 +18,6 @@ AlumnoModel.init({
     documento: Sequelize.STRING(9),
     domicilio: Sequelize.STRING(255)
 }, { sequelize, modelName: 'alumnos', timestamps: true });
+
+AlumnoModel.hasMany(CursoAlumnoModel, {foreignKey: 'id'});
+CursoAlumnoModel.belongsTo(AlumnoModel, {foreignKey: 'alumno_id'});

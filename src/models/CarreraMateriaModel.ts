@@ -1,7 +1,6 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
-import CarreraMateriaDocenteModel from './CarreraMateriaDocenteModel';
-import CarreraModel from './CarreraModel';
+import CursoModel from './CursoModel';
 
 export default class CarreraMateriaModel extends Model {}
 
@@ -10,5 +9,5 @@ CarreraMateriaModel.init({
     materia_id: { type: Sequelize.INTEGER },
 }, { sequelize, modelName: 'carreras_materias', timestamps: true });
 
-CarreraMateriaModel.hasMany(CarreraMateriaDocenteModel, {foreignKey: 'id'});
-CarreraMateriaDocenteModel.belongsTo(CarreraMateriaModel, {foreignKey: 'carrera_materia_id'});
+CarreraMateriaModel.hasMany(CursoModel, {foreignKey: 'id'});
+CursoModel.belongsTo(CarreraMateriaModel, {foreignKey: 'carrera_materia_id'});

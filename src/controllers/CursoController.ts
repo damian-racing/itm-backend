@@ -18,12 +18,12 @@ export default class CursoController extends BaseController {
         object.fecha_estado = new Date();
         
         const exist = await CursoModel.findAll({where: {
-            alumno_id: object.alumno_id,
-            carrera_materia_docente_id: object.carrera_materia_docente_id,
+            carrera_materia_id: object.carrera_materia_id,
+            docente_id: object.docente_id,
             fecha_hasta: null
         }});
 
-        if (exist.length > 0) res.status(400).send(errorResponse(400, Error("Curso existente")));
+        if (exist.length > 0) res.status(400).send(errorResponse(400, Error("Carrera materia docente existente")));
         else {
             CursoModel.create(object, { validate: true })
             .then(model => res.status(201).json(successResponse(model)))
@@ -33,23 +33,23 @@ export default class CursoController extends BaseController {
     
     public async list(req: express.Request, res: express.Response) {
         const query = {
-            // include: [                
-            //     DocenteModel,                
-            //     {
-            //         model: CarreraMateriaModel,
-            //         as: 'carreras_materia',
-            //         include: [
-            //             {
-            //                 model: CarreraModel,
-            //                 as: 'carrera'
-            //             },
-            //             {
-            //                 model: MateriaModel,
-            //                 as: 'materia'
-            //             }                        
-            //         ]
-            //     },
-            // ],
+            include: [                
+                DocenteModel,                
+                {
+                    model: CarreraMateriaModel,
+                    as: 'carreras_materia',
+                    include: [
+                        {
+                            model: CarreraModel,
+                            as: 'carrera'
+                        },
+                        {
+                            model: MateriaModel,
+                            as: 'materia'
+                        }                        
+                    ]
+                },
+            ],
             where: {
                 fecha_hasta: null
             }
@@ -64,21 +64,21 @@ export default class CursoController extends BaseController {
         const id = req.params.id;
         CursoModel.findByPk(id, {
             include: [                
-                // DocenteModel,                
-                // {
-                //     model: CarreraMateriaModel,
-                //     as: 'carreras_materia',
-                //     include: [
-                //         {
-                //             model: CarreraModel,
-                //             as: 'carrera'
-                //         },
-                //         {
-                //             model: MateriaModel,
-                //             as: 'materia'
-                //         }                        
-                //     ]
-                // },
+                DocenteModel,                
+                {
+                    model: CarreraMateriaModel,
+                    as: 'carreras_materia',
+                    include: [
+                        {
+                            model: CarreraModel,
+                            as: 'carrera'
+                        },
+                        {
+                            model: MateriaModel,
+                            as: 'materia'
+                        }                        
+                    ]
+                },
             ],
         })
         .then(model => {
