@@ -1,9 +1,30 @@
 import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
 import CarreraMateriaModel from '../models/CarreraMateriaModel';
+import CursoModel from '../models/CursoModel';
+import DocenteModel from '../models/DocenteModel';
 
 export default class CarreraMateriaController {
     constructor() {}
+
+    public async read(req: express.Request, res: express.Response) {
+        const id = req.params.id;
+        const query = {
+            include: {
+                model: CursoModel,
+                include: [
+                    DocenteModel
+                ]
+            }
+        }
+
+        CarreraMateriaModel.findByPk(id, query)
+        .then(model => {
+            if (! model) res.status(400).send(errorResponse(400, Error('No encontrado')));
+            else res.status(200).json(successResponse({model}));
+        })
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+    };
     
     public async create(req: express.Request, res: express.Response) {
         const collection = req.body;

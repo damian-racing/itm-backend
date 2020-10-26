@@ -10,6 +10,7 @@ import TurnoRouter from '../routes/TurnoRouter';
 import CorrelativaRouter from '../routes/CorrelativaRouter';
 import CursoRouter from './CursosRouter';
 import CursoAlumnoRouter from './CursoAlumnoRouter';
+import AsistenciaRouter from './AsistenciaRouter';
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router.use('/turnos', TurnoRouter);
 router.use('/correlativas', CorrelativaRouter);
 router.use('/cursos', CursoRouter);
 router.use('/cursos_alumnos', CursoAlumnoRouter);
+router.use('/asistencias', AsistenciaRouter);
 
 export default router;

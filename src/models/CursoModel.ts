@@ -13,5 +13,5 @@ CursoModel.init({
     cantidad_inscriptos: { type: Sequelize.INTEGER },
 }, { sequelize, modelName: 'cursos', timestamps: true });
 
-CursoModel.hasMany(CursoAlumnoModel, {foreignKey: 'id'});
+// CursoModel.hasMany(CursoAlumnoModel, {foreignKey: 'id'});
 CursoAlumnoModel.belongsTo(CursoModel, {foreignKey: 'curso_id'});

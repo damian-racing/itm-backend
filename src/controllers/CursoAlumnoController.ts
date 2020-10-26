@@ -34,7 +34,7 @@ export default class CursoAlumnoController extends BaseController {
     };
     
     public async list(req: express.Request, res: express.Response) {
-        const query = {
+        let query: any = {
             include: [                
                 AlumnoModel,                
                 {
@@ -62,6 +62,10 @@ export default class CursoAlumnoController extends BaseController {
             where: {
                 fecha_hasta: null
             }
+        }
+
+        if (req.query.curso_id) {
+            query.where['curso_id'] = req.query.curso_id;
         }
 
         CursoAlumnoModel.findAll(query)
