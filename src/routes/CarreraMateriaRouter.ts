@@ -12,8 +12,9 @@ const carreraMateriaMiddleware = (req: express.Request, res: express.Response, n
 
 router.use(carreraMateriaMiddleware);
 
+router.get('/', carreraMateriaController.list);
 router.get('/:id', carreraMateriaController.read);
 router.post('/', carreraMateriaController.create);
-router.delete('/', carreraMateriaController.delete);
+router.delete('/:id', carreraMateriaController.delete);
 
 export default router;
