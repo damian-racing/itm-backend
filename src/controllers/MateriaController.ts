@@ -3,6 +3,7 @@ import { successResponse, errorResponse } from '../valueObject/response';
 import MateriaModel from '../models/MateriaModel';
 import TurnoModel from '../models/TurnoModel';
 import BaseController from './BaseController';
+import MateriaTurnoModel from '../models/MateriaTurnoModel';
 
 export default class MateriaController extends BaseController {
     constructor() {
@@ -23,33 +24,6 @@ export default class MateriaController extends BaseController {
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
 
-    public async update(req: express.Request, res: express.Response) {
-        const id = req.params.id;
-        const materiaFieldsUpdate = req.body;
-        
-        if (req.body.nombre) materiaFieldsUpdate.nombre = req.body.nombre;
-    
-        if (req.body.estado) {
-            materiaFieldsUpdate.estado = req.body.estado;
-            materiaFieldsUpdate.fecha_estado = new Date();
-        }
-    
-        MateriaModel.update(
-            materiaFieldsUpdate,
-            { where: { id }, validate: true },
-        )
-        .then(async (materia) => {        
-            if (! materia[0]) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
-            else {
-                const materiaEntity = await MateriaModel.findByPk(id);
-                if (! materiaEntity) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
-    
-                res.status(200).json(successResponse({materiaEntity}));
-            }
-        })
-        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
-    };
-
     // public async create(req: express.Request, res: express.Response) {
     //     const object = req.body;
         
@@ -66,47 +40,49 @@ export default class MateriaController extends BaseController {
     //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     // };
     
-    // public async update(req: express.Request, res: express.Response) {
-    //     const id = req.params.id;
-    //     const materiaFieldsUpdate = req.body;
+    public async update(req: express.Request, res: express.Response) {
+        const id = Number(req.params.id);
+        const materiaFieldsUpdate = req.body;
         
-    //     if (req.body.nombre) materiaFieldsUpdate.nombre = req.body.nombre;
-    //     if (req.body.duracion) materiaFieldsUpdate.duracion = req.body.duracion;
+        if (req.body.nombre) materiaFieldsUpdate.nombre = req.body.nombre;
         
-    //     if (req.body.estado) {
-    //         materiaFieldsUpdate.estado = req.body.estado;
-    //         materiaFieldsUpdate.fecha_estado = new Date();
-    //     }
+        if (req.body.estado) {
+            materiaFieldsUpdate.estado = req.body.estado;
+            materiaFieldsUpdate.fecha_estado = new Date();
+        }
 
-    //     const query = {
-    //         where: {
-    //             materia_id: id
-    //         }
-    //     }
+        const query = {
+            where: {
+                materia_id: id
+            }
+        }
 
-    //     MateriaTurnoModel.destroy(query)
-    //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
-
-    //     const collection = req.body.turnos.map((element: any) => {return {materia_id: id, turno_id: element.turno_id}});
+        await MateriaTurnoModel.destroy(query)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
         
-    //     MateriaTurnoModel.bulkCreate(collection, {ignoreDuplicates: true})
-    //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        const collection = req.body.turnos.map((element: any) => {return {materia_id: id, turno_id: element.turno_id}});
+        console.log(collection);
+        const response = await MateriaTurnoModel.bulkCreate(collection)
+        .catch((error: Error) => {
+            console.log(error.stack);
+            res.status(500).send(errorResponse(500, error));
+        });
+
+        MateriaModel.update(
+            materiaFieldsUpdate,
+            { where: { id }, validate: true },
+        )
+        .then(async (materia) => {        
+            if (! materia[0]) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
+            else {
+                const materiaEntity = await MateriaModel.findByPk(id);
+                if (! materiaEntity) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
     
-    //     MateriaModel.update(
-    //         materiaFieldsUpdate,
-    //         { where: { id }, validate: true },
-    //     )
-    //     .then(async (materia) => {        
-    //         if (! materia[0]) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
-    //         else {
-    //             const materiaEntity = await MateriaModel.findByPk(id);
-    //             if (! materiaEntity) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
-    
-    //             res.status(200).json(successResponse({materiaEntity}));
-    //         }
-    //     })
-    //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
-    // };
+                res.status(200).json(successResponse({materiaEntity}));
+            }
+        })
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+    };
     
     public async delete(req: express.Request, res: express.Response) {
         const id = req.params.id;
