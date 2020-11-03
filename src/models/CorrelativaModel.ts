@@ -6,6 +6,4 @@ export default class CorrelativaModel extends Model {}
 CorrelativaModel.init({
     carrera_materia_id: { type: Sequelize.INTEGER },
     correlativa_id: { type: Sequelize.INTEGER },
-}, { sequelize, modelName: 'correlativas', timestamps: true });
-
-CorrelativaModel.removeAttribute('id');
+}, { sequelize, modelName: 'correlativas', timestamps: false });

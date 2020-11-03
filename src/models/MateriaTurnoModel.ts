@@ -1,9 +1,9 @@
 import sequelize from '../configuration'; 
 import Sequelize, { Model } from 'sequelize';
 
-export default class CarreraMateriaTurnoModel extends Model {}
+export default class MateriaTurnoModel extends Model {}
 
-CarreraMateriaTurnoModel.init({
+MateriaTurnoModel.init({
     turno_id: { type: Sequelize.INTEGER },
     carrera_materia_id: { type: Sequelize.INTEGER },
-}, { sequelize, modelName: 'carreras_materias_turnos', timestamps: false });
+}, { sequelize, modelName: 'materias_turnos', timestamps: false });

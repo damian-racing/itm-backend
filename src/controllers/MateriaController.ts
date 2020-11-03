@@ -1,7 +1,6 @@
 import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
 import MateriaModel from '../models/MateriaModel';
-import MateriaTurnoModel from '../models/CarreraMateriaTurnoModel';
 import TurnoModel from '../models/TurnoModel';
 import BaseController from './BaseController';
 
@@ -9,6 +8,20 @@ export default class MateriaController extends BaseController {
     constructor() {
         super(MateriaModel);
     }
+
+    public async read(req: express.Request, res: express.Response) {
+        const id = req.params.id;
+        MateriaModel.findByPk(id, {
+            include: [                
+                TurnoModel,                                
+            ],
+        })
+        .then(model => {
+            if (! model) res.status(400).send(errorResponse(400, Error('No encontrado')));
+            else res.status(200).json(successResponse({model}));
+        })
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+    };
 
     public async update(req: express.Request, res: express.Response) {
         const id = req.params.id;
