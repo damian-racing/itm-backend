@@ -24,50 +24,48 @@ export default class MateriaController extends BaseController {
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
     };
 
-    // public async create(req: express.Request, res: express.Response) {
-    //     const object = req.body;
+    public async create(req: express.Request, res: express.Response) {
+        const object = req.body;
         
-    //     object.fecha_estado = new Date();
-    //     object.estado = 'activo';
+        object.fecha_estado = new Date();
+        object.estado = 'activo';
 
-    //     const response = await MateriaModel.create(object, { validate: true })
-    //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        const response = await MateriaModel.create(object, { validate: true })
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
 
-    //     const collection = object.turnos.map((element: any) => { return {turno_id: element.turno_id, materia_id: response.get('id')}});
+        const collection = object.turnos.map((element: any) => { return {turno_id: element.turno_id, materia_id: response.get('id')}});
         
-    //     MateriaTurnoModel.bulkCreate(collection, {ignoreDuplicates: true})
-    //     .then(collection => res.status(201).json(successResponse(response)))
-    //     .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
-    // };
+        MateriaTurnoModel.bulkCreate(collection, {ignoreDuplicates: true})
+        .then(collection => res.status(201).json(successResponse(response)))
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+    };
     
     public async update(req: express.Request, res: express.Response) {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const materiaFieldsUpdate = req.body;
         
         if (req.body.nombre) materiaFieldsUpdate.nombre = req.body.nombre;
+        if (req.body.duracion) materiaFieldsUpdate.duracion = req.body.duracion;
         
         if (req.body.estado) {
             materiaFieldsUpdate.estado = req.body.estado;
             materiaFieldsUpdate.fecha_estado = new Date();
         }
-
+    
         const query = {
             where: {
                 materia_id: id
             }
         }
-
-        await MateriaTurnoModel.destroy(query)
+    
+        MateriaTurnoModel.destroy(query)
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
-        
+    
         const collection = req.body.turnos.map((element: any) => {return {materia_id: id, turno_id: element.turno_id}});
-        console.log(collection);
-        const response = await MateriaTurnoModel.bulkCreate(collection)
-        .catch((error: Error) => {
-            console.log(error.stack);
-            res.status(500).send(errorResponse(500, error));
-        });
-
+        
+        MateriaTurnoModel.bulkCreate(collection, {ignoreDuplicates: true})
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+    
         MateriaModel.update(
             materiaFieldsUpdate,
             { where: { id }, validate: true },
