@@ -7,3 +7,5 @@ MateriaTurnoModel.init({
     turno_id: { type: Sequelize.INTEGER },
     materia_id: { type: Sequelize.INTEGER },
 }, { sequelize, modelName: 'materias_turnos', timestamps: true });
+
+MateriaTurnoModel.removeAttribute('id');
