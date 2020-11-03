@@ -6,6 +6,7 @@ import CarreraMateriaModel from '../models/CarreraMateriaModel';
 import BaseController from './BaseController';
 import CursoModel from '../models/CursoModel';
 import DocenteModel from '../models/DocenteModel';
+import CorrelativaModel from '../models/CorrelativaModel';
 
 export default class CarreraMateriaController extends BaseController  {
     constructor() {
@@ -21,6 +22,26 @@ export default class CarreraMateriaController extends BaseController  {
                     as: 'cursos',
                     include: [
                         DocenteModel,
+                        {
+                            model: CarreraMateriaModel,
+                            as: 'carreras_materia',
+                            include: [
+                                {
+                                    model: CarreraModel,
+                                    as: 'carrera'
+                                },
+                                {
+                                    model: MateriaModel,
+                                    as: 'materia'
+                                }                        
+                            ]
+                        },                     
+                    ]
+                },
+                {
+                    model: CorrelativaModel,
+                    as: 'correlativas',
+                    include: [
                         {
                             model: CarreraMateriaModel,
                             as: 'carreras_materia',
