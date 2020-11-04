@@ -12,6 +12,6 @@ const correlativaMiddleware = (req: express.Request, res: express.Response, next
 
 router.use(correlativaMiddleware);
 
-router.post('/', correlativaController.create);
+router.post('/:carreraMateriaId', correlativaController.create);
 
 export default router;

@@ -16,7 +16,15 @@ export default class CarreraMateriaController extends BaseController  {
     public async read(req: express.Request, res: express.Response) {
         const id = req.params.id;
         CarreraMateriaModel.findByPk(id, {
-            include: [                
+            include: [           
+                {
+                    model: CarreraModel,
+                    as: 'carrera'
+                },
+                {
+                    model: MateriaModel,
+                    as: 'materia'
+                },       
                 {
                     model: CursoModel,
                     as: 'cursos',
@@ -39,23 +47,17 @@ export default class CarreraMateriaController extends BaseController  {
                     ]
                 },
                 {
-                    model: CorrelativaModel,
-                    as: 'correlativas',
+                    model: CarreraMateriaModel,
+                    as: 'correlativas_carreras_materias',
                     include: [
                         {
-                            model: CarreraMateriaModel,
-                            as: 'carreras_materia',
-                            include: [
-                                {
-                                    model: CarreraModel,
-                                    as: 'carrera'
-                                },
-                                {
-                                    model: MateriaModel,
-                                    as: 'materia'
-                                }                        
-                            ]
-                        },                     
+                            model: CarreraModel,
+                            as: 'carrera'
+                        },
+                        {
+                            model: MateriaModel,
+                            as: 'materia'
+                        }                        
                     ]
                 },
             ],
@@ -92,7 +94,7 @@ export default class CarreraMateriaController extends BaseController  {
     };
 
     public async list(req: express.Request, res: express.Response) {
-        const query = {
+        const query: any = {
             include: [
                 {
                     model: CarreraModel,
@@ -106,6 +108,11 @@ export default class CarreraMateriaController extends BaseController  {
             where: {
                 estado: 'activo'
             }
+        }
+
+        const carreraId = req.query.carrera_id;
+        if (carreraId) {
+            query.where['carrera_id'] = carreraId; 
         }
 
         CarreraMateriaModel.findAll(query)
@@ -132,7 +139,7 @@ export default class CarreraMateriaController extends BaseController  {
                 fecha_estado: new Date()
             }
         
-            CursoModel.update(
+            CarreraMateriaModel.update(
                 objectFieldUpdate,
                 { where: { id }, validate: true}
             )

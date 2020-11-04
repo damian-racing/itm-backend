@@ -16,4 +16,5 @@ CarreraMateriaModel.init({
 CarreraMateriaModel.hasMany(CursoModel, {foreignKey: 'carrera_materia_id'});
 CursoModel.belongsTo(CarreraMateriaModel, {foreignKey: 'carrera_materia_id'});
 
-CarreraMateriaModel.hasMany(CorrelativaModel, { as: 'correlativas', foreignKey: 'carrera_materia_id' });
+CarreraMateriaModel.belongsToMany(CarreraMateriaModel, { as: 'children', through: 'correlativas', foreignKey: 'correlativa_id' });
+CarreraMateriaModel.belongsToMany(CarreraMateriaModel, { as: 'correlativas_carreras_materias', through: 'correlativas', foreignKey: 'carrera_materia_id' });
