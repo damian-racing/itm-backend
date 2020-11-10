@@ -17,5 +17,7 @@ router.post('/', cursoController.create);
 router.get('/:id', cursoController.read);
 router.put('/:id', cursoController.update);
 router.delete('/:id', cursoController.delete);
+router.get('/evaluaciones/all', cursoController.getEvaluaciones);
+router.get('/evaluaciones/:id', cursoController.getEvaluacionesByCurso);
 
 export default router;
