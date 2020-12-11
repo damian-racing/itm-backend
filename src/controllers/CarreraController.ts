@@ -66,15 +66,28 @@ export default class CarreraController extends BaseController {
             estado: 'baja',
             fecha_estado: new Date()
         }
-    
-        CarreraModel.update(
-            carreraFieldsUpdate,
-            { where: { id }, validate: true}
-        )
-        .then((carrera) => {
-            if (! carrera[0]) res.status(400).send(errorResponse(400, Error('Carrera no encontrada')));
-            else res.status(204).end();
-        })
-        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        
+        const queryExistCarreraMateria = {
+            where: {
+                carrera_id: id,
+                estado: 'activo'
+            }
+        }
+
+        const existCarreraMateria = await CarreraMateriaModel.findOne(queryExistCarreraMateria)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
+        
+        if (existCarreraMateria) res.status(400).send(errorResponse(400, Error("Carrera materia vigente")))
+        else {
+            CarreraModel.update(
+                carreraFieldsUpdate,
+                { where: { id }, validate: true}
+            )
+            .then((carrera) => {
+                if (! carrera[0]) res.status(400).send(errorResponse(400, Error('Carrera no encontrada')));
+                else res.status(204).end();
+            })
+            .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        }
     };
 }

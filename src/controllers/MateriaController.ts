@@ -4,6 +4,7 @@ import MateriaModel from '../models/MateriaModel';
 import TurnoModel from '../models/TurnoModel';
 import BaseController from './BaseController';
 import MateriaTurnoModel from '../models/MateriaTurnoModel';
+import CarreraMateriaModel from '../models/CarreraMateriaModel';
 
 export default class MateriaController extends BaseController {
     constructor() {
@@ -89,15 +90,28 @@ export default class MateriaController extends BaseController {
             estado: 'baja',
             fecha_estado: new Date()
         }
-    
-        MateriaModel.update(
-            materiaFieldsUpdate,
-            { where: { id }, validate: true}
-        )
-        .then((materia) => {
-            if (! materia[0]) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
-            else res.status(204).end();
-        })
-        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+
+        const queryExistCarreraMateria = {
+            where: {
+                materia_id: id,
+                estado: 'activo'
+            }
+        }
+
+        const existCarreraMateria = await CarreraMateriaModel.findOne(queryExistCarreraMateria)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
+        
+        if (existCarreraMateria) res.status(400).send(errorResponse(400, Error("Carrera materia vigente")))
+        else {
+            MateriaModel.update(
+                materiaFieldsUpdate,
+                { where: { id }, validate: true}
+            )
+            .then((materia) => {
+                if (! materia[0]) res.status(400).send(errorResponse(400, Error('Materia no encontrada')));
+                else res.status(204).end();
+            })
+            .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        }
     };
 }

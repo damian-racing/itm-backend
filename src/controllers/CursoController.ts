@@ -10,6 +10,7 @@ import DocenteModel from '../models/DocenteModel';
 import CarreraMateriaModel from '../models/CarreraMateriaModel';
 import CarreraModel from '../models/CarreraModel';
 import MateriaModel from '../models/MateriaModel';
+import CursoAlumnoModel from '../models/CursoAlumnoModel';
 
 export default class CursoController extends BaseController {
     constructor() {
@@ -191,14 +192,27 @@ export default class CursoController extends BaseController {
             fecha_hasta: new Date()
         }
 
-        CursoModel.update(
-            objectFieldUpdate,
-            { where: { id }, validate: true }
-        )
+        const queryExistCursoAlumno = {
+            where: {
+                curso_id: id,
+                fecha_hasta: null
+            }
+        }
+
+        const existCursoAlumno = await CursoAlumnoModel.findOne(queryExistCursoAlumno)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
+        
+        if (existCursoAlumno) res.status(400).send(errorResponse(400, Error("Curso alumno vigente")))
+        else {
+            CursoModel.update(
+                objectFieldUpdate,
+                { where: { id }, validate: true }
+            )
             .then((object) => {
                 if (!object[0]) res.status(400).send(errorResponse(400, Error('No encontrado')));
                 else res.status(204).end();
             })
             .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        }
     };
 }

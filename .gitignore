@@ -2,3 +2,4 @@
 /mysql
 yarn.lock
 .env
+/dist

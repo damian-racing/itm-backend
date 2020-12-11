@@ -2,6 +2,7 @@ import express from 'express';
 import { successResponse, errorResponse } from '../valueObject/response';
 import AlumnoModel from '../models/AlumnoModel';
 import BaseController from './BaseController';
+import CursoAlumnoModel from '../models/CursoAlumnoModel';
 
 export default class AlumnoController extends BaseController {
     constructor() {
@@ -51,15 +52,29 @@ export default class AlumnoController extends BaseController {
             estado: 'baja',
             fecha_estado: new Date()
         }
-    
-        AlumnoModel.update(
-            alumnoFieldsUpdate,
-            { where: { id }, validate: true}
-        )
-        .then((alumno) => {
-            if (! alumno[0]) res.status(400).send(errorResponse(400, Error('Alumno no encontrado')));
-            else res.status(204).end();
-        })
-        .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        
+        const queryExistCursoAlumno = {
+            where: {
+                alumno_id: id,
+                fecha_hasta: null
+            }
+        }
+
+        const existCursoAlumno = await CursoAlumnoModel.findOne(queryExistCursoAlumno)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
+        
+        if (existCursoAlumno) res.status(400).send(errorResponse(400, Error("Curso Alumno vigente")))
+        else {
+
+            AlumnoModel.update(
+                alumnoFieldsUpdate,
+                { where: { id }, validate: true}
+            )
+            .then((alumno) => {
+                if (! alumno[0]) res.status(400).send(errorResponse(400, Error('Alumno no encontrado')));
+                else res.status(204).end();
+            })
+            .catch((error: Error) => res.status(500).send(errorResponse(500, error)));
+        }
     };
 }

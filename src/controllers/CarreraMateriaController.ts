@@ -123,16 +123,26 @@ export default class CarreraMateriaController extends BaseController  {
     public async delete(req: express.Request, res: express.Response) {
         const id = req.params.id;
         
-        const query = {
+        const queryExistCurso = {
             where: {
                 carrera_materia_id: id,
                 fecha_hasta: null
             }
         }
-        const existCurso = await CursoModel.findOne(query)
+        const existCurso = await CursoModel.findOne(queryExistCurso)
         .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
 
+        const queryExistCorrelativa = {
+            where: {
+                correlativa_id: id
+            }
+        }
+
+        const existCorrelativa = await CorrelativaModel.findOne(queryExistCorrelativa)
+        .catch((error: Error) => res.status(500).send(errorResponse(500, error)))
+        
         if (existCurso) res.status(400).send(errorResponse(400, Error("Curso vigente")))
+        else if (existCorrelativa) res.status(400).send(errorResponse(400, Error("Correlativa existente")))
         else {
             const objectFieldUpdate = {
                 estado: 'baja',

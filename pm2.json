@@ -1,0 +1,10 @@
+{
+    "apps": [
+        {
+            "name": "itm-backend",
+            "script": "yarn",
+            "args": "start",
+            "interpreter": "none"
+        }
+    ]
+}
