@@ -64,7 +64,7 @@ export default class CursoController extends BaseController {
     private static getQueryString() {
         return `
             SELECT 
-            cursos.id, 
+                cursos.id as Curso_id, 
                 docentes.apellido as Docente_apellido, 
                 docentes.nombres as Docente_nombre, 
                 carreras.nombre as Carrera, 
